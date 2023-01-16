@@ -11,7 +11,7 @@
         packages.please-build = pkgs.stdenv.mkDerivation {
           name = "please-build";
           src = self;
-          depsBuildBuild = with pkgs; [ go ];
+          depsBuildBuild = with pkgs; [ go makeWrapper ];
           buildPhase = ''
             export HOME=$(pwd)
             go run -race src/please.go $PLZ_ARGS --log_file plz-out/log/bootstrap_build.log build //src:please
@@ -29,6 +29,7 @@
             chmod 0664 "$out/.please/junit_runner.jar"
             mkdir -p $out/bin
             makeWrapper $out/.please/please $out/bin/please --set HOME $out
+            makeWrapper $out/.please/please $out/bin/please-build --set HOME $out
           '';
         };
 
