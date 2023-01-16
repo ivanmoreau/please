@@ -18,17 +18,17 @@
             plz-out/bin/src/please build //package:installed_files
           '';
           installPhase = ''
-            mkdir -p $out
+            mkdir -p $out/.please
             OUTPUTS="`plz-out/bin/src/please query outputs //package:installed_files`"
             for OUTPUT in $OUTPUTS; do
-              TARGET="$out/$(basename $OUTPUT)"
+              TARGET="$out/.please/$(basename $OUTPUT)"
               rm -f "$TARGET"  # Important so we don't write through symlinks.
               cp $OUTPUT $TARGET
               chmod 0775 $TARGET
             done
-            chmod 0664 "$out/junit_runner.jar"
+            chmod 0664 "$out/.please/junit_runner.jar"
             mkdir -p $out/bin
-            ln -s $out/please $out/bin/please
+            makeWrapper $out/.please/please $out/bin/please --set HOME $out
           '';
         };
 
