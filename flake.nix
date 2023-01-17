@@ -32,8 +32,10 @@
             done
             chmod 0664 "$out/.please/junit_runner.jar"
             mkdir -p $out/bin
-            makeWrapper $out/.please/please $out/bin/please --set HOME ${lib.getExe config.flake-root.package}
-            makeWrapper $out/.please/please $out/bin/please-build --set HOME ${lib.getExe config.flake-root.package}
+            # makeWrapper $out/.please/please $out/bin/please --set HOME ${lib.getExe config.flake-root.package}
+            # makeWrapper $out/.please/please $out/bin/please-build --set HOME ${lib.getExe config.flake-root.package}
+            ln -s $out/please $out/bin/please
+            ln -s $out/please $out/bin/please-build
           '';
         };
 
