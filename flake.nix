@@ -28,8 +28,8 @@
             done
             chmod 0664 "$out/.please/junit_runner.jar"
             mkdir -p $out/bin
-            ln -s $out/please $out/bin/please
-            ln -s $out/please $out/bin/please-build
+            makeWrapper $out/.please/please $out/bin/please
+            makeWrapper $out/.please/please $out/bin/please-build
           '';
         };
 
