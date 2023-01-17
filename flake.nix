@@ -2,11 +2,15 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
+    flake-root.url = "github:srid/flake-root";
   };
 
   outputs = inputs@{ self, nixpkgs, flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = nixpkgs.lib.systems.flakeExposed;
+      imports = [
+        inputs.flake-root.flakeModule
+      ];
       perSystem = { self', pkgs, lib, config, system, ... }: {
         packages.please-build = pkgs.stdenv.mkDerivation {
           name = "please-build";
@@ -28,8 +32,8 @@
             done
             chmod 0664 "$out/.please/junit_runner.jar"
             mkdir -p $out/bin
-            makeWrapper $out/.please/please $out/bin/please --set HOME $out
-            makeWrapper $out/.please/please $out/bin/please-build --set HOME $out
+            makeWrapper $out/.please/please $out/bin/please --set HOME ${lib.getExe config.flake-root.package}
+            makeWrapper $out/.please/please $out/bin/please-build --set HOME ${lib.getExe config.flake-root.package}
           '';
         };
 
